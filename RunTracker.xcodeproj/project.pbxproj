@@ -15,6 +15,7 @@
 		AFCC23722AE597810058DEDE /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = AFCC23712AE597810058DEDE /* SDWebImageSwiftUI */; };
 		AFCC23742AE59E060058DEDE /* AppMaterials.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCC23732AE59E060058DEDE /* AppMaterials.swift */; };
 		AFCC23762AE5B89A0058DEDE /* TrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCC23752AE5B89A0058DEDE /* TrackingView.swift */; };
+		AFCC23782AE82E490058DEDE /* RunView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFCC23772AE82E490058DEDE /* RunView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,8 @@
 		AFCC236E2AE5964E0058DEDE /* runningGif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = runningGif.gif; sourceTree = "<group>"; };
 		AFCC23732AE59E060058DEDE /* AppMaterials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMaterials.swift; sourceTree = "<group>"; };
 		AFCC23752AE5B89A0058DEDE /* TrackingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingView.swift; sourceTree = "<group>"; };
+		AFCC23772AE82E490058DEDE /* RunView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunView.swift; sourceTree = "<group>"; };
+		AFCC23792AE832E70058DEDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +62,7 @@
 		AFCC235F2AE593340058DEDE /* RunTracker */ = {
 			isa = PBXGroup;
 			children = (
+				AFCC23792AE832E70058DEDE /* Info.plist */,
 				AFCC23602AE593340058DEDE /* RunTrackerApp.swift */,
 				AFCC23622AE593340058DEDE /* MainView.swift */,
 				AFCC23642AE593360058DEDE /* Assets.xcassets */,
@@ -66,6 +70,7 @@
 				AFCC23662AE593360058DEDE /* Preview Content */,
 				AFCC23732AE59E060058DEDE /* AppMaterials.swift */,
 				AFCC23752AE5B89A0058DEDE /* TrackingView.swift */,
+				AFCC23772AE82E490058DEDE /* RunView.swift */,
 			);
 			path = RunTracker;
 			sourceTree = "<group>";
@@ -157,6 +162,7 @@
 			files = (
 				AFCC23742AE59E060058DEDE /* AppMaterials.swift in Sources */,
 				AFCC23632AE593340058DEDE /* MainView.swift in Sources */,
+				AFCC23782AE82E490058DEDE /* RunView.swift in Sources */,
 				AFCC23612AE593340058DEDE /* RunTrackerApp.swift in Sources */,
 				AFCC23762AE5B89A0058DEDE /* TrackingView.swift in Sources */,
 			);
@@ -295,6 +301,8 @@
 				DEVELOPMENT_TEAM = UNB5M72KA3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RunTracker/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Gimme location to start tracking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -324,6 +332,8 @@
 				DEVELOPMENT_TEAM = UNB5M72KA3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RunTracker/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Gimme location to start tracking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
