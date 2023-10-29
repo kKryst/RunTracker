@@ -15,15 +15,6 @@ struct RunningData: Identifiable {
     var tempo: Double
 }
 
-struct RainDataOverlay: View {
-    var intensity: Double
-    
-    var body: some View {
-        RadialGradient(gradient: Gradient(colors: [Color.blue.opacity(0.5 * intensity), Color.blue.opacity(0.0)]), center: .center, startRadius: 0, endRadius: 25 * CGFloat(intensity))
-            .frame(width: 50 * CGFloat(intensity), height: 50 * CGFloat(intensity))
-    }
-}
-
 struct RainDataPoint: Identifiable {
     var id = UUID()
     var coordinate: CLLocationCoordinate2D
@@ -31,35 +22,14 @@ struct RainDataPoint: Identifiable {
     var intensity: Double
 }
 
-struct TrackingView: View {
+struct HomeView: View {
     
-    var data = [
-        RunningData(day: "Mon", tempo: 5.45),
-        RunningData(day: "Tue", tempo: 5.30),
-        RunningData(day: "Wed", tempo: 6.12),
-        RunningData(day: "Thu", tempo: 5.01),
-        RunningData(day: "Fri", tempo: 6.30),
-        RunningData(day: "Sat", tempo: 5.39),
-        RunningData(day: "Sun", tempo: 4.55)
-    ]
+    @StateObject private var vm = HomeViewWM()
     
-    @State private var region = MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 50.7819, longitude: 17.0818), // Strzelin, Poland
-            span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
-        )
+    @State private var shouldAnimate = false
     
-    let allRainDataPoints: [RainDataPoint] = [
-            RainDataPoint(coordinate: CLLocationCoordinate2D(latitude: 50.7819, longitude: 17.0818), hour: 10, intensity: 0.9), // Strzelin, Poland at 10 AM with moderate rain
-            RainDataPoint(coordinate: CLLocationCoordinate2D(latitude: 50.2594, longitude: 19.0216), hour: 14, intensity: 0.8), // Katowice, Poland at 2 PM with heavy rain
-            RainDataPoint(coordinate: CLLocationCoordinate2D(latitude: 51.1079, longitude: 17.0385), hour: 16, intensity: 0.3)  // Wroclaw, Poland at 4 PM with light rain
-        ]
-    
-    var currentHourRainDataPoints: [RainDataPoint] {
-            let currentHour = 10
-            return allRainDataPoints.filter { $0.hour == currentHour }
-        }
+    @State private var cameraPositon: MapCameraPosition = .region(.userRegion)
         
-    
     var body: some View {
         NavigationView {
             VStack(spacing: 18) {
@@ -68,7 +38,7 @@ struct TrackingView: View {
                         Text("Avg. tempo")
                             .font(.system(size: 20))
                             .foregroundColor(.gray)
-                        Text("5.40")
+                        Text("\(vm.averageTempo())")
                             .fontWeight(.medium)
                             .foregroundColor(AppMaterials.colors.appBrown)
                             .font(.system(size: 32))
@@ -78,30 +48,34 @@ struct TrackingView: View {
                         Text("Hi again")
                             .font(.system(size: 20))
                             .foregroundColor(.gray)
-                        Text("User")
-                            .fontWeight(.medium)
-                            .foregroundColor(AppMaterials.colors.appBrown)
-                            .font(.system(size: 32))
+                        Button {
+                            vm.replaceData()
+                            shouldAnimate.toggle()
+                        } label: {
+                            Text("User")
+                                .fontWeight(.medium)
+                                .foregroundColor(AppMaterials.colors.appBrown)
+                                .font(.system(size: 32))
+                        }
                     }
                     .padding(.trailing)
-                   
-                    
                 }
                 
-                Chart {
-                    ForEach(data) { d in
-                        BarMark(x: .value("Day", d.day), y: .value("Tempo", d.tempo))
-                            .cornerRadius(8)
-                            .annotation {
-                                Text(String(format: "%.2f", d.tempo))
-                                    .foregroundStyle(AppMaterials.colors.appBrown)
-                            }
-                            .foregroundStyle(AppMaterials.colors.appOrange)
+                Chart(vm.data) { d in
+                    BarMark(x: .value("Day", d.day),
+                            y: .value("Tempo", d.tempo)
+                    )
+                    .annotation(position: AnnotationPosition.top) {
+                        Text(String(format: "%.2f", d.tempo))
+                            .foregroundStyle(AppMaterials.colors.appBrown)
                     }
+                    .cornerRadius(8)
+                    .foregroundStyle(AppMaterials.colors.appOrange)
                 }
+                .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/, value: shouldAnimate)
                 .chartLegend(position: .leading, alignment: .leading)
-                .frame(maxHeight: 200)
-                .padding() // Add padding for a nicer look
+                .frame(height: 200)
+                .padding()
                 .background(RoundedRectangle(cornerRadius: 20)
                             .stroke(Color.gray, lineWidth: 2)
                 )
@@ -112,7 +86,7 @@ struct TrackingView: View {
                     Image(systemName: "figure.walk.circle.fill")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(maxWidth: 64, maxHeight: 64)
+                        .frame(width: 64, height: 64)
                         .foregroundColor(AppMaterials.colors.appBrown)
                     VStack {
                         Text("30")
@@ -122,7 +96,6 @@ struct TrackingView: View {
                         Text("total km")
                             .font(.system(size: 20))
                             .foregroundColor(.gray)
-                            
                     }
                     
                     Rectangle()
@@ -132,7 +105,7 @@ struct TrackingView: View {
                     Image(systemName: "flame.circle.fill")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(maxWidth: 64, maxHeight: 64)
+                        .frame(width: 64, height: 64)
                         .foregroundColor(AppMaterials.colors.appBrown)
                     VStack {
                         Text("1432")
@@ -152,7 +125,6 @@ struct TrackingView: View {
                             .stroke(Color.gray, lineWidth: 2)
                 )
                 
-                
                 HStack {
                     NavigationLink(destination: {
                         RunView()
@@ -162,22 +134,18 @@ struct TrackingView: View {
                             .fontWeight(.regular)
                             .font(.system(size: 32))
                             .foregroundStyle(.white)
-                        .background(AppMaterials.colors.appOrange)
-                        .foregroundStyle(AppMaterials.colors.appBrown)
-                        .cornerRadius(20)
+                            .background(AppMaterials.colors.appOrange)
+                            .foregroundStyle(AppMaterials.colors.appBrown)
+                            .cornerRadius(20)
                     }
                 }
                 
                 VStack {
-                    Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: currentHourRainDataPoints) { dataPoint in
-                                MapAnnotation(coordinate: dataPoint.coordinate) {
-                                    RainDataOverlay(intensity: dataPoint.intensity)
-                                }
-                            }
-                    .cornerRadius(20)
+                    Map(position: $cameraPositon, interactionModes: MapInteractionModes()) {
+                    }
                     
                     HStack{
-                        Text("Check the weather in your area")
+                        Text("Check the rain in your area (TBD)")
                             .font(.system(size: 16))
                             .foregroundColor(.gray)
                             .frame(alignment: .center)
@@ -186,8 +154,7 @@ struct TrackingView: View {
                 }
             }
             .padding()
-            .background(AppMaterials.colors.appWhite, ignoresSafeAreaEdges: .all)
-        .navigationBarBackButtonHidden(true)
+            .background(AppMaterials.colors.appWhite)
         }
     }
 }
@@ -195,8 +162,7 @@ struct TrackingView: View {
 struct TrackingView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            TrackingView()
+            HomeView()
         }
-
     }
 }

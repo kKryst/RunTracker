@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct MainView: View {
+struct AuthorisationView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -54,7 +54,7 @@ struct MainView: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
-                    .frame(maxHeight: 100)
+                    .frame(height: 100)
                     VStack(alignment: .center, spacing: 8){
                         NavigationLink(destination: {}, label: {
                             Text("Login")
@@ -75,7 +75,7 @@ struct MainView: View {
                                 .cornerRadius(10)
                         })
                         NavigationLink(destination: {
-                            TrackingView()
+                            HomeView()
                                 .navigationBarBackButtonHidden()
                         }, label: {
                             Text("Continue without registration")
@@ -134,8 +134,7 @@ struct BlurView: UIViewRepresentable {
 struct RunningWorkoutView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView() {
-            MainView()
+            AuthorisationView()
         }
-
     }
 }
