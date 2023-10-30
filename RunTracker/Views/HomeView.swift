@@ -9,19 +9,6 @@ import Charts
 import SwiftUI
 import MapKit
 
-struct RunningData: Identifiable {
-    var id = UUID().uuidString
-    var day: String
-    var tempo: Double
-}
-
-struct RainDataPoint: Identifiable {
-    var id = UUID()
-    var coordinate: CLLocationCoordinate2D
-    var hour: Int
-    var intensity: Double
-}
-
 struct HomeView: View {
     
     @StateObject private var vm = HomeViewWM()
@@ -38,24 +25,21 @@ struct HomeView: View {
                         Text("Avg. tempo")
                             .font(.system(size: 20))
                             .foregroundColor(.gray)
-                        Text("\(vm.averageTempo())")
+                        Text("\(vm.calculateAverageTempo())")
                             .fontWeight(.medium)
                             .foregroundColor(AppMaterials.colors.appBrown)
                             .font(.system(size: 32))
                     }
                     Spacer()
                     VStack(spacing: 6) {
-                        Text("Hi again")
-                            .font(.system(size: 20))
-                            .foregroundColor(.gray)
-                        Button {
-                            vm.replaceData()
-                            shouldAnimate.toggle()
+                        NavigationLink {
+                            AuthorisationView()
+                                .navigationBarBackButtonHidden()
                         } label: {
-                            Text("User")
-                                .fontWeight(.medium)
-                                .foregroundColor(AppMaterials.colors.appBrown)
-                                .font(.system(size: 32))
+                            Image(systemName: "person.circle")
+                                .resizable()
+                                .frame(width: 48, height: 48)
+                                .foregroundStyle(AppMaterials.colors.appBrown)
                         }
                     }
                     .padding(.trailing)
@@ -120,7 +104,7 @@ struct HomeView: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-                .padding() // Add padding for a nicer look
+                .padding()
                 .background(RoundedRectangle(cornerRadius: 20)
                             .stroke(Color.gray, lineWidth: 2)
                 )

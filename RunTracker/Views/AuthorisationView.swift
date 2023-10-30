@@ -56,7 +56,10 @@ struct AuthorisationView: View {
                     }
                     .frame(height: 100)
                     VStack(alignment: .center, spacing: 8){
-                        NavigationLink(destination: {}, label: {
+                        NavigationLink(destination: {
+                            HomeView()
+                                .navigationBarBackButtonHidden()
+                        }, label: {
                             Text("Login")
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
@@ -65,7 +68,10 @@ struct AuthorisationView: View {
                                 .background(AppMaterials.colors.appBrown)
                                 .cornerRadius(10)
                         })
-                        NavigationLink(destination: {}, label: {
+                        NavigationLink(destination: {
+                            HomeView()
+                                .navigationBarBackButtonHidden()
+                        }, label: {
                             Text("Register")
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
@@ -106,29 +112,6 @@ struct AuthorisationView: View {
             )
         }
     }
-}
-
-struct BlurView: UIViewRepresentable {
-    let style: UIBlurEffect.Style
-
-    func makeUIView(context: Context) -> some UIView {
-        let view = UIView(frame: .zero)
-        view.backgroundColor = .clear
-
-        let blurEffect = UIBlurEffect(style: style)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(blurView)
-
-        NSLayoutConstraint.activate([
-            blurView.heightAnchor.constraint(equalTo: view.heightAnchor),
-            blurView.widthAnchor.constraint(equalTo: view.widthAnchor),
-        ])
-
-        return view
-    }
-
-    func updateUIView(_ uiView: UIViewType, context: Context) {}
 }
 
 struct RunningWorkoutView_Previews: PreviewProvider {
