@@ -11,38 +11,50 @@ import SwiftUI
 
 
 extension HomeView {
+    
     @MainActor class HomeViewWM: ObservableObject{
         
         @Published var data = [
-            RunningData(day: "Mon", tempo: 5.45),
-            RunningData(day: "Tue", tempo: 5.30),
-            RunningData(day: "Wed", tempo: 6.12),
-            RunningData(day: "Thu", tempo: 5.01),
-            RunningData(day: "Fri", tempo: 6.30),
-            RunningData(day: "Sat", tempo: 5.39),
-            RunningData(day: "Sun", tempo: 4.55)
+            RunningData(day: "Mon", tempo: 5.15, distance: 5.0, date: Date(), calories: 324),
+            RunningData(day: "Tue", tempo: 5.55, distance: 6.0, date: Date(), calories: 430),
+            RunningData(day: "Wed", tempo: 6.15, distance: 5.3, date: Date(), calories: 374),
+            RunningData(day: "Thu", tempo: 5.07, distance: 5.8, date: Date(), calories: 451),
+            RunningData(day: "Fri", tempo: 5.37, distance: 4.8, date: Date(), calories: 530),
+            RunningData(day: "Sat", tempo: 5.30, distance: 5.1, date: Date(), calories: 399),
+            RunningData(day: "Sun", tempo: 6.11, distance: 6.0, date: Date(), calories: 481)
         ]
         
-        private var data2 = [
-            RunningData(day: "Sat", tempo: 6.45),
-            RunningData(day: "Sun", tempo: 7.30),
-            RunningData(day: "Mon", tempo: 8.12),
-            RunningData(day: "Tue", tempo: 4.01),
-            RunningData(day: "Wed", tempo: 2.30),
-            RunningData(day: "Thu", tempo: 1.39),
-            RunningData(day: "Fri", tempo: 0.55)
-        ]
+        @Published var avgTempo: String?
         
-        func replaceData() {
-            data = data2
-        }
+        @Published var totalCalories: String?
         
-        func calculateAverageTempo() -> String {
+        @Published var totalDistance: String?
+        
+        private var aTempo: String {
             let totalTempo = data.reduce(0) { $0 + $1.tempo }
             let average = totalTempo / Double(data.count)
             
-            // Convert the rounded value to a String with two decimal places
             return String(format: "%.2f", average)
+        }
+        
+        private var tDistance: String {
+            var sum = 0.0
+            
+            data.forEach { element in
+                sum += element.tempo
+            }
+            
+            return String(format: "%.1f", sum)
+        }
+        
+        private var tCalories: String {
+            var sum = 0
+            
+            data.forEach { element in
+                sum += element.calories
+            }
+            
+            return String(sum)
         }
     }
 }

@@ -11,4 +11,7 @@ struct RunningData: Identifiable {
     var id = UUID().uuidString
     var day: String
     var tempo: Double
+    var distance: Double
+    var date: Date
+    var calories: Int
 }

@@ -25,10 +25,20 @@ struct HomeView: View {
                         Text("Avg. tempo")
                             .font(.system(size: 20))
                             .foregroundColor(.gray)
-                        Text("\(vm.calculateAverageTempo())")
-                            .fontWeight(.medium)
-                            .foregroundColor(AppMaterials.colors.appBrown)
-                            .font(.system(size: 32))
+                        
+                        if let avgTempo = vm.avgTempo {
+                            Text(avgTempo)
+                                .fontWeight(.medium)
+                                .foregroundColor(AppMaterials.colors.appBrown)
+                                .font(.system(size: 32))
+                        }
+                        else {
+                            Text("0.0")
+                                .fontWeight(.medium)
+                                .foregroundColor(AppMaterials.colors.appBrown)
+                                .font(.system(size: 32))
+                        }
+                        
                     }
                     Spacer()
                     VStack(spacing: 6) {
@@ -73,13 +83,24 @@ struct HomeView: View {
                         .frame(width: 64, height: 64)
                         .foregroundColor(AppMaterials.colors.appBrown)
                     VStack {
-                        Text("30")
-                            .fontWeight(.medium)
-                            .foregroundColor(AppMaterials.colors.appBrown)
-                            .font(.system(size: 32))
+                        
+                        if let totalKilometers = vm.totalDistance {
+                            Text(totalKilometers)
+                                .fontWeight(.medium)
+                                .foregroundColor(AppMaterials.colors.appBrown)
+                                .font(.system(size: 24))
+                        }
+                        else {
+                            Text("0.0")
+                                .fontWeight(.medium)
+                                .foregroundColor(AppMaterials.colors.appBrown)
+                                .font(.system(size: 24))
+                        }
+                            
                         Text("total km")
-                            .font(.system(size: 20))
+                            .font(.system(size: 18))
                             .foregroundColor(.gray)
+                            .frame(width: .infinity)
                     }
                     
                     Rectangle()
@@ -92,13 +113,23 @@ struct HomeView: View {
                         .frame(width: 64, height: 64)
                         .foregroundColor(AppMaterials.colors.appBrown)
                     VStack {
-                        Text("1432")
-                            .fontWeight(.medium)
-                            .foregroundColor(AppMaterials.colors.appBrown)
-                            .font(.system(size: 32))
-                            .frame(alignment: .center)
-                        Text("calories burned")
-                            .font(.system(size: 20))
+                        if let totalCalories = vm.totalCalories {
+                            Text(totalCalories)
+                                .fontWeight(.medium)
+                                .foregroundColor(AppMaterials.colors.appBrown)
+                                .font(.system(size: 24))
+                                .frame(alignment: .center)
+                        }
+                        else {
+                            Text("0")
+                                .fontWeight(.medium)
+                                .foregroundColor(AppMaterials.colors.appBrown)
+                                .font(.system(size: 24))
+                                .frame(alignment: .center)
+                        }
+                            
+                        Text("calories")
+                            .font(.system(size: 18))
                             .foregroundColor(.gray)
                             .frame(alignment: .center)
                     }

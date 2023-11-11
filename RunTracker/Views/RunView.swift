@@ -12,36 +12,16 @@ import CoreLocation
 
 struct RunView: View {
 
-    
     @State private var distance = ""
     
     @State private var cameraPositon: MapCameraPosition = .region(.userRegion)
     
+    @State private var userPosition = MapCameraPosition.userLocation(fallback: .automatic)
 
     var body: some View {
         ZStack{
-            Map(position: $cameraPositon) {
-                Annotation("My Location", coordinate: .userLocation) {
-                    ZStack{
-                        Circle()
-                            .frame(width: 32, height: 32)
-                            .foregroundStyle(.blue.opacity(0.25))
-                        Circle()
-                            .frame(width: 20, height: 20)
-                            .foregroundStyle(.white)
-                        Circle()
-                            .frame(width: 12, height: 12)
-                            .foregroundStyle(.blue)
-                    }
-                }
-            }
-            .mapControls{
-                MapUserLocationButton()
-            }
-            
-            
-            
-            
+            RunMapView()
+                .ignoresSafeArea()
             VStack (spacing: 350){
                 VStack {
                     HStack(spacing: 0) {
